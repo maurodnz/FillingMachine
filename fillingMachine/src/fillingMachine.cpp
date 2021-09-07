@@ -174,6 +174,8 @@ void mainStatus() {
       } else {
         intervalMillis = waitTime;
 
+        fillCompleteBeep();
+
         if(debug) {
           Serial.println("Fill Completed. Waiting for next bottle...");
           Serial.print("pumpState: "); Serial.println(pumpState);
@@ -467,7 +469,9 @@ void setWaitDec() {
 }
 
 void fillCompleteBeep() {
-  
+  tone(BUZZER, 1000, 200);
+  delay(250);
+  noTone(BUZZER);
 }
 
 void bootToneBeep() {
