@@ -24,6 +24,7 @@ void printWaitTime();
 void printScreen();
 
 void resetCounter();
+void manual();
 
 void createBottleIcon();
 void bootToneBeep();

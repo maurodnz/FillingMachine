@@ -113,17 +113,8 @@ void printScreen() {
   lcd.print(w);
 }
 
-void mainStatus() {
-  //printScreen();
-
-  dt = millis() - t1;
-
-  fillTime = f_sec * 1000 + f_dec * 10;
-  waitTime = w_sec * 1000 + w_dec * 10;
-
-  // Manual Mode
-  if(digitalRead(MANUAL_BTN) == HIGH) {
-    if(debug)
+void manual() {
+  if(debug)
       Serial.println("Manual filling...");
 
     digitalWrite(PUMP, HIGH);
@@ -136,18 +127,24 @@ void mainStatus() {
       Serial.println("Manual filling complete.");
 
     fillCompleteBeep();
+}
+
+void mainStatus() {
+  printScreen();
+
+  dt = millis() - t1;
+
+  fillTime = f_sec * 1000 + f_dec * 10;
+  waitTime = w_sec * 1000 + w_dec * 10;
+
+  // Manual Mode
+  if(digitalRead(MANUAL_BTN) == HIGH) {
+    manual();
   }
 
   // Reset counter
   if(digitalRead(CLEAR_BTN) == HIGH) {
     resetCounter();
-    delay(100);
-
-    if(debug) {
-      Serial.println("Reset counter.");
-      Serial.print("New counter value: ");
-      Serial.println(counter);
-    }
   }
 
   // Auto Mode
@@ -187,7 +184,7 @@ void mainStatus() {
     digitalWrite(PUMP, LOW);
     digitalWrite(AUTO_LED, LOW);
 
-    fillCompleteBeep();
+    //fillCompleteBeep();
   }
 
   if(readKeys() == KEY_SELECT) {
@@ -492,4 +489,12 @@ void bootToneBeep() {
 
 void resetCounter() {
   counter = 0;
+
+  delay(100);
+
+  if(debug) {
+    Serial.println("Reset counter.");
+    Serial.print("New counter value: ");
+    Serial.println(counter);
+  }
 }
