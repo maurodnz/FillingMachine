@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
+#include "eeprom.h"
 
 // Pins definition
 #define CLEAR_BTN     6
@@ -15,6 +16,7 @@
 #define BUZZER        10
 
 // LCD Print functions
+void initLCD();
 void printCounter(int c);
 void printDigit(int d);
 void printIcon();

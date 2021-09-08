@@ -26,21 +26,18 @@ void setup() {
 
 
   // Initial configuration
-  digitalWrite(PUMP, LOW);
-
   counter = 0;
   state = 0;
   first = true;
 
+  read_EEPROM();
+
   pumpState = LOW;
   intervalMillis = f_sec * 1000 + f_dec * 10;
 
-  lcd.init();
-  lcd.backlight();
-  lcd.setCursor(0,0);
-  lcd.clear();
+  digitalWrite(PUMP, pumpState);
 
-  createBottleIcon();
+  initLCD();
   bootToneBeep();
 
   if(debug) {

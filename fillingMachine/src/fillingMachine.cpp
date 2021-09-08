@@ -180,7 +180,7 @@ void mainStatus() {
       }
     }
   } else {
-    //Serial.println("Auto filling off.");
+    Serial.println("Auto filling off.");
     digitalWrite(PUMP, LOW);
     digitalWrite(AUTO_LED, LOW);
 
