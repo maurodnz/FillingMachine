@@ -11,7 +11,8 @@ int fillTime, waitTime;
 int state;
 int counter;
 bool first;
-bool debug = true;
+bool debug = false;
+bool eeprom = true;
 
 void setup() {
   // Pin Mode Configuration
@@ -30,7 +31,16 @@ void setup() {
   state = 0;
   first = true;
 
-  read_EEPROM();
+  /*
+  if(eeprom) {
+    initEEPROM();
+    delay(400);
+
+    eeprom = false;
+  }
+  else
+    read_EEPROM();
+  */
 
   pumpState = LOW;
   intervalMillis = f_sec * 1000 + f_dec * 10;

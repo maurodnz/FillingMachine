@@ -54,6 +54,16 @@ byte bottle_4[8] = {
   B11100
 };
 
+void initLCD() {
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
+  lcd.setCursor(0,0);
+
+  createBottleIcon();
+  printScreen();
+}
+
 void createBottleIcon() {
   lcd.createChar(1, bottle_1);
   lcd.createChar(2, bottle_2);
@@ -126,6 +136,7 @@ void manual() {
     if(debug)
       Serial.println("Manual filling complete.");
 
+    counter++;
     fillCompleteBeep();
 }
 
@@ -162,7 +173,6 @@ void mainStatus() {
 
       if(pumpState) {
         intervalMillis = fillTime;                                                                                                                                                    
-        printCounter(++counter);
 
         if(debug) {
           Serial.println("Filling. Pump running...");
@@ -171,6 +181,7 @@ void mainStatus() {
       } else {
         intervalMillis = waitTime;
 
+        printCounter(++counter);
         fillCompleteBeep();
 
         if(debug) {
@@ -180,11 +191,11 @@ void mainStatus() {
       }
     }
   } else {
-    Serial.println("Auto filling off.");
     digitalWrite(PUMP, LOW);
     digitalWrite(AUTO_LED, LOW);
 
-    //fillCompleteBeep();
+    if(debug)
+      Serial.println("Auto filling off.");
   }
 
   if(readKeys() == KEY_SELECT) {
@@ -461,26 +472,27 @@ void setWaitDec() {
       break;
     case KEY_SELECT:
       setState(0);
+      //write_EEPROM(f_sec, f_dec, w_sec, w_dec, 0);
       break;
   }
 }
 
 void fillCompleteBeep() {
-  tone(BUZZER, 1000, 200);
+  tone(BUZZER, 2500, 200);
   delay(250);
   noTone(BUZZER);
 }
 
 void bootToneBeep() {
-  int frequency[] = {880, 880, 784, 740, 587, 740, 880, 784};
-  int duration[] = {500, 375, 125, 375, 125, 375, 125, 1000};
+  int frequency[] = {2349, 1760, 1480, 1175, 1480, 1760, 2349};
+  int duration[] = {125, 125, 125, 125, 125, 125, 1000};
 
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 7; i++) {
     tone(BUZZER, frequency[i], duration[i]);
 
     // To distinguish the notes, set a minimum time between them.
-    // The note's duration + 30% seems to work well.
-    int pauseBetweenNotes = duration[i] * 1.30;
+    // The note's duration + 50% seems to work well.
+    int pauseBetweenNotes = duration[i] * 1.50;
     delay(pauseBetweenNotes);
 
     noTone(BUZZER);
@@ -489,6 +501,9 @@ void bootToneBeep() {
 
 void resetCounter() {
   counter = 0;
+
+  lcd.clear();
+  printScreen();
 
   delay(100);
 
